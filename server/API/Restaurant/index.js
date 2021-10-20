@@ -1,7 +1,9 @@
 import express from "express";
 import {RestaurantModel} from "../../database/allModels";
-import { ValidateRestaurantCity, ValidateRestaurantSearchString } from "../../validation/restaurant";
-import { ValidateRestaurantId } from "../../validation/food";
+
+//Validation
+import {ValidateRestaurantCity, ValidateRestaurantSearchString} from "../../validation/restaurant";
+import {ValidateRestaurantId} from "../../validation/food";
 
 const Router = express.Router();
 
@@ -35,7 +37,8 @@ Method           GET
 
 Router.get("/:_id", async(req,res) => {
   try {
-    await ValidateRestaurantId(req.params);
+await ValidateRestaurantId(req.params);
+
     const { _id } = req.params;
     const restaurant = await RestaurantModel.findOne(_id);
 
@@ -49,26 +52,29 @@ Router.get("/:_id", async(req,res) => {
 });
 
 /*
-Route            /
-Des              Get restaurant details search
+Route            /search
+Des              Get Restaurant details search
 Params           none
-body             searchString
+Body             searchString
 Access           Public
 Method           GET
 */
-
-Router.get("/search", async(req,res) => {
+/*xxxxyyyyyaaaabbbbb*/
+Router.get("/search", async(req,res)=> {
   try {
-    await ValidateRestaurantSearchString(req.body);
+
+   await ValidateRestaurantSearchString(req.body);
 
     const {searchString} = req.body;
 
     const restaurants = await RestaurantModel.find({
       name: {$regex: searchString, $options: "i"},
     });
+
+    return res.json({restaurants});
   } catch (error) {
-      return res.status(500).json({error: error.message});
+    return res.status(500).json({error: error.message});
   }
-});
+} );
 
 export default Router;

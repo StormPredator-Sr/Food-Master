@@ -1,7 +1,5 @@
 /node_modules
 
-/Utils/AWS/s3.js
-
 package-lock.json
 
 .env

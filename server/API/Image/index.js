@@ -1,5 +1,5 @@
 //Libraries
-
+//require('dotenv').config();
 import express from "express";
 import AWS from "aws-sdk";
 import multer from "multer";
@@ -8,11 +8,11 @@ import multer from "multer";
 import {ImageModel} from "../../database/allModels";
 
 //Utilities
-import {s3Upload} from "../../Utils/AWS/s3";
+import {s3Upload} from "../../Utilities/AWS/s3";
 
 const Router = express.Router();
 
-//Multer configuration
+//Multer config
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 
@@ -21,7 +21,7 @@ Route            /
 Des              Uploading given image to S3 bucket , and then saving the file to mongodb
 Params           None
 Access           Public
-Method           GET
+Method           POST
 */
 
 Router.post("/", upload.single("file") ,async(req,res)=> {
@@ -30,7 +30,7 @@ Router.post("/", upload.single("file") ,async(req,res)=> {
 
  //S3 bucket options
  const bucketOptions = {
-   Bucket: "shapeaijuly2021",
+   Bucket: "julybatchzm",
    Key: file.originalname,
    Body: file.buffer,
    ContentType: file.mimetype,
@@ -38,7 +38,9 @@ Router.post("/", upload.single("file") ,async(req,res)=> {
  };
 
 
-const uploadImage = await s3Upload(bucketOptions);
+ const uploadImage = await s3Upload(bucketOptions);
+
+ return res.status(200).json({ uploadImage });
 
   } catch (error) {
 return res.status(500).json({error: error.message});

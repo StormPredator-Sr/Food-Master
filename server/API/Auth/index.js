@@ -1,41 +1,42 @@
-//Library
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 
-//Model
-import { UserModel } from "../../database/user";
-
 const Router = express.Router();
+
+//Models
+import { UserModel } from "../../database/user";
 
 //Validation
 import { ValidateSignup, ValidateSignin } from "../../validation/auth";
 
 /*
-Route   /signup
-des      signup wth email and password
-params   none
-access   public
-method   post
+Route         /signup
+Descrip       Signup with email and password
+Params        None
+Access        Public
+Method        POST
 */
 
-Router.post ("/signup", async (req, res) => {
-    try {
+Router.post("/signup", async(req,res) => {
+  try {
 await ValidateSignup(req.body.credentials);
 
 await UserModel.findEmailAndPhone(req.body.credentials);
-      //DB
-      const newUser = await UserModel.create(req.body.credentials);
-      // generate JWT auth token
-      const token = newUser.generateJwtToken();
+//DB
+   const newUser = await UserModel.create(req.body.credentials);
 
-      // return
-      return res.status(200).json({ token, status:"success" });
-   } catch (error) {
-     return res.status(500).json({ error: error.message });
-   }
+   //JWT Auth Token
+   const token = newUser.generateJwtToken();
+
+   return res.status(200).json({token});
+
+  } catch (error) {
+    return res.status(500).json({error: error.message});
+  }
 });
+
 
 /*
 Route         /signin
@@ -49,7 +50,9 @@ Router.post("/signin", async(req,res) => {
   try {
 await ValidateSignin(req.body.credentials);
 
-    const user = await UserModel.findByEmailAndPassword(req.body.credentials);
+    const user = await UserModel.findByEmailAndPassword(
+      req.body.credentials
+    );
 
    //JWT Auth Token
    const token = user.generateJwtToken();
@@ -60,6 +63,7 @@ await ValidateSignin(req.body.credentials);
     return res.status(500).json({error: error.message});
   }
 });
+
 
 /*
 Route         /google
@@ -91,4 +95,13 @@ Router.get("/google/callback", passport.authenticate("google",{failureRedirect: 
 }
 );
 
+
+
+
 export default Router;
+
+//thariq
+//encrypted - 45t1ywh895%%bjhg%%y8719880 -> yhajkgggggggggggguy782178319 ->
+
+//UserModel.ourStatic()
+//checkUserByEmail.ourMethods()

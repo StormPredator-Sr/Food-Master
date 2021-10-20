@@ -14,7 +14,7 @@ const HomeLayoutHOC = ({component: Component, ...rest}) => {
           <Component {...rest} />
          </HomeLayout>
        )
-       }
+     }
      />
     </>
   );

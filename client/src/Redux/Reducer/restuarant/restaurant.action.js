@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import {GET_RESTAURANT} from "./restaurant.type";
+import { GET_RESTAURANT } from "./restaurant.type";
 
 export const getRestaurant = () => async(dispatch) => {
   try {
